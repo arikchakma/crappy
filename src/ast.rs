@@ -7,9 +7,14 @@ pub struct Program {
 
 impl fmt::Display for Program {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        for statement in &self.statements {
-            writeln!(f, "{}", statement)?;
+        let mut iter = self.statements.iter().peekable();
+        while let Some(stmt) = iter.next() {
+            write!(f, "{}", stmt)?;
+            if iter.peek().is_some() {
+                writeln!(f)?;
+            }
         }
+
         Ok(())
     }
 }

@@ -73,8 +73,9 @@ impl<'a> Parser<'a> {
 
         let mut left = self.nud(token_for_nud)?;
 
-        let (l_bp, _) = self.get_binding_power(&self.current_token);
-        while self.current_token != Token::EOF && precedence < l_bp {
+        while self.current_token != Token::EOF
+            && precedence < self.get_binding_power(&self.current_token).0
+        {
             let op_token = self.current_token.clone();
             self.next_token();
 
@@ -163,5 +164,36 @@ impl<'a> Parser<'a> {
             Token::Plus | Token::Minus => Some(80),
             _ => None,
         }
+    }
+}
+
+pub fn check_parser_error(p: &Parser) {
+    if !p.errors.is_empty() {
+        for err in p.errors.iter() {
+            println!("  - {}", err);
+        }
+    }
+}
+
+#[test]
+fn test_operator_precedence_parsing() {
+    let math_expressions = vec![
+        ("(1 + 2) * 3", "((1 + 2) * 3)"),
+        ("1 + 2 * 3", "(1 + (2 * 3))"),
+        ("1 + -2 * 3", "(1 + ((-2) * 3))"),
+        ("10 - 5 - 2", "((10 - 5) - 2)"),
+        ("10 - -2", "(10 - (-2))"),
+        ("2 ^ 3 ^ 2", "(2 ^ (3 ^ 2))"),
+    ];
+
+    for expr_str in math_expressions {
+        let (source, expected) = expr_str;
+
+        let mut parser = Parser::new(source);
+        let program = parser.parse_program();
+        check_parser_error(&parser);
+
+        assert_eq!(parser.errors.len(), 0);
+        assert_eq!(format!("{}", program), expected);
     }
 }
