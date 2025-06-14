@@ -67,6 +67,7 @@ Feel free to submit pull requests, create issues, or spread the word.
 
 - [Writing an Interpreter in Go](https://interpreterbook.com/) by Thorsten Ball
 - [JavaScript Parser in Rust](https://oxc.rs/docs/learn/parser_in_rust/intro.html) by Oxc
+- [Simple but Powerful Pratt Parsing](https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html) by Matklad
 
 ## License
 
