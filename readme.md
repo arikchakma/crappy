@@ -1,3 +1,5 @@
+<br />
+
 <h1 align="center">Crappy Calculator</h1>
 
 <p align="center">
@@ -14,12 +16,14 @@
   <sub>Just enter an expression, and it will be evaluated</sub><br>
 </p>
 
+> [!NOTE]  
+> This project is created purely for learning purposes. It's a simple implementation to understand basic concepts of parsing, lexing, and interpreting expressions, and Rust. Don't expect production-grade features or performance!
+
 ## Start Using
 
 You can start using the calculator by cloning the repository and running the following commands:
 
 ```bash
-# Clone the repository
 git clone git@github.com:arikchakma/crappy.git
 cd crappy
 
@@ -58,6 +62,11 @@ Bye!
 ## Contributing
 
 Feel free to submit pull requests, create issues, or spread the word.
+
+## Acknowledgments
+
+- [Writing an Interpreter in Go](https://interpreterbook.com/) by Thorsten Ball
+- [JavaScript Parser in Rust](https://oxc.rs/docs/learn/parser_in_rust/intro.html) by Oxc
 
 ## License
 
