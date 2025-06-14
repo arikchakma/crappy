@@ -1,4 +1,9 @@
-use crate::{ast::Statement, evaluate::evaluate, parser::Parser};
+use crate::{
+    ast::Statement,
+    evaluate::evaluate,
+    parser::{Parser, check_parser_error},
+};
+use std::{io, io::Write};
 
 mod ast;
 mod evaluate;
@@ -7,42 +12,39 @@ mod parser;
 mod token;
 
 fn main() {
-    let math_expressions = vec![
-        "1 + 2 * 3",
-        "(1 + 2) * 3",
-        "1 + -2 * 3",
-        "10 - 5 - 2",
-        "10 - -2",
-        "2 ^ 3 ^ 2",
-    ];
+    println!("{}", "-".repeat(20));
+    println!("Crappy Calculator!");
+    println!("{}", "-".repeat(20));
+    println!("Enter an expression to evaluate:");
+    println!("Type '/bye' to quit.");
 
-    for expr_str in math_expressions {
-        println!("Evaluating: {}", expr_str);
-        println!("{}", "-".repeat(20));
+    start_repl();
+}
 
-        let source = expr_str;
-        let mut parser = Parser::new(source);
+fn start_repl() {
+    loop {
+        print!(">> ");
+        io::stdout().flush().unwrap();
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+
+        if input.trim() == "/bye" {
+            println!("Bye!");
+            break;
+        }
+
+        let mut parser = Parser::new(&input);
         let program = parser.parse_program();
+        check_parser_error(&parser);
 
-        if !parser.errors.is_empty() {
-            println!("Parser Errors:");
-            for err in parser.errors.iter() {
-                println!("  - {}", err);
-            }
-        } else {
-            println!("Program AST: {:#?}", program);
-            println!("Program Expression: {}", program.to_string());
-
-            for statement in program.statements {
-                match statement {
-                    Statement::ExpressionStatement(expr) => match evaluate(&expr) {
-                        Ok(result) => println!("Evaluation Result: {}", result),
-                        Err(e) => println!("Evaluation Error: {}", e),
-                    },
-                    // _ => println!("Unhandled statement type: {:?}", statement),
-                }
+        for statement in program.statements {
+            match statement {
+                Statement::ExpressionStatement(expr) => match evaluate(&expr) {
+                    Ok(result) => println!("{}", result),
+                    Err(e) => println!("{}", e),
+                },
             }
         }
-        println!("---\n");
     }
 }
