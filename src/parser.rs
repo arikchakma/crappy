@@ -73,9 +73,8 @@ impl<'a> Parser<'a> {
 
         let mut left = self.nud(token_for_nud)?;
 
-        while self.current_token != Token::EOF
-            && precedence < self.get_binding_power(&self.current_token).0
-        {
+        let (l_bp, _) = self.get_binding_power(&self.current_token);
+        while self.current_token != Token::EOF && precedence < l_bp {
             let op_token = self.current_token.clone();
             self.next_token();
 
@@ -154,7 +153,7 @@ impl<'a> Parser<'a> {
         match token {
             Token::Plus | Token::Minus => (50, 50),
             Token::Asterisk | Token::Slash => (60, 60),
-            Token::Caret => (70, 71),
+            Token::Caret => (71, 70),
             _ => (0, 0),
         }
     }

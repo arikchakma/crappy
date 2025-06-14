@@ -13,9 +13,13 @@ fn main() {
         "1 + -2 * 3",
         "10 - 5 - 2",
         "10 - -2",
+        "2 ^ 3 ^ 2",
     ];
 
     for expr_str in math_expressions {
+        println!("Evaluating: {}", expr_str);
+        println!("{}", "-".repeat(20));
+
         let source = expr_str;
         let mut parser = Parser::new(source);
         let program = parser.parse_program();
@@ -26,7 +30,8 @@ fn main() {
                 println!("  - {}", err);
             }
         } else {
-            println!("Program AST: {:#?}", program); // Pretty print the AST
+            println!("Program AST: {:#?}", program);
+            println!("Program Expression: {}", program.to_string());
 
             for statement in program.statements {
                 match statement {
